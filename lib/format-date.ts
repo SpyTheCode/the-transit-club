@@ -32,6 +32,10 @@ function ordinalSuffix(day: number) {
   }
 }
 
+function ordinalDay(day: number) {
+  return `${day}${ordinalSuffix(day)}`;
+}
+
 export function formatDate(date: Date) {
   if (Number.isNaN(date.getTime())) {
     throw new RangeError("Cannot format an invalid date.");
@@ -41,5 +45,32 @@ export function formatDate(date: Date) {
   const month = MONTHS[date.getUTCMonth()];
   const year = date.getUTCFullYear();
 
-  return `${day}${ordinalSuffix(day)} ${month}, ${year}`;
+  return `${ordinalDay(day)} ${month}, ${year}`;
+}
+
+export function formatDateRange(startDate: Date, endDate: Date) {
+  if (
+    Number.isNaN(startDate.getTime()) ||
+    Number.isNaN(endDate.getTime()) ||
+    endDate < startDate
+  ) {
+    throw new RangeError("Cannot format an invalid date range.");
+  }
+
+  const startDay = startDate.getUTCDate();
+  const endDay = endDate.getUTCDate();
+  const startMonth = MONTHS[startDate.getUTCMonth()];
+  const endMonth = MONTHS[endDate.getUTCMonth()];
+  const startYear = startDate.getUTCFullYear();
+  const endYear = endDate.getUTCFullYear();
+
+  if (startYear === endYear && startMonth === endMonth) {
+    return `${ordinalDay(startDay)} - ${ordinalDay(endDay)} ${endMonth}, ${endYear}`;
+  }
+
+  if (startYear === endYear) {
+    return `${ordinalDay(startDay)} ${startMonth} - ${ordinalDay(endDay)} ${endMonth}, ${endYear}`;
+  }
+
+  return `${formatDate(startDate)} - ${formatDate(endDate)}`;
 }

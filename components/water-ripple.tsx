@@ -41,6 +41,11 @@ export function WaterRipple() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    const canAnimate =
+      window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!canAnimate) return;
+
     const renderer = new Renderer({
       alpha: true,
       antialias: true,
@@ -72,18 +77,10 @@ export function WaterRipple() {
     });
     resizeObserver.observe(canvas);
 
-    const onPointerMove = (event: PointerEvent) => {
-      const bounds = canvas.getBoundingClientRect();
-      pointer.set(
-        (event.clientX - bounds.left) / bounds.width,
-        1 - (event.clientY - bounds.top) / bounds.height,
-      );
-    };
-    window.addEventListener("pointermove", onPointerMove);
-
     let frame = 0;
     let animationFrame = 0;
     let lastTime = 0;
+    let lastPointerActivity = 0;
 
     const render = (time: number) => {
       const elapsed = lastTime ? (time - lastTime) / 1000 : 0;
@@ -91,18 +88,27 @@ export function WaterRipple() {
       frame += elapsed;
       program.uniforms.uTime.value = frame;
       renderer.render({ scene: mesh });
-      animationFrame = window.requestAnimationFrame(render);
+      if (time - lastPointerActivity < 1200) {
+        animationFrame = window.requestAnimationFrame(render);
+      } else {
+        animationFrame = 0;
+      }
     };
 
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    if (prefersReducedMotion) {
-      renderer.render({ scene: mesh });
-    } else {
-      animationFrame = window.requestAnimationFrame(render);
-    }
+    renderer.render({ scene: mesh });
+    const onPointerMove = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse") return;
+      const bounds = canvas.getBoundingClientRect();
+      pointer.set(
+        (event.clientX - bounds.left) / bounds.width,
+        1 - (event.clientY - bounds.top) / bounds.height,
+      );
+      lastPointerActivity = performance.now();
+      if (!animationFrame) {
+        animationFrame = window.requestAnimationFrame(render);
+      }
+    };
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
 
     return () => {
       window.cancelAnimationFrame(animationFrame);

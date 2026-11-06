@@ -4,7 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "The Transit Club — Made for the way there",
   description:
-    "Independent everyday goods inspired by the places, people and journeys that move us.",
+    "An experiential arm and collective archive by Malak. A community for explorers, nomads, and the space between destinations.",
   icons: {
     icon: "/logo/logo.png",
   },
