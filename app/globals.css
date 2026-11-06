@@ -171,25 +171,49 @@ input {
   inset: 0;
 }
 
+.hero-image {
+  background:
+    radial-gradient(ellipse at 75% 24%, rgba(87, 181, 166, 0.26), transparent 42%),
+    linear-gradient(135deg, #061e2b 4%, #0c4e55 100%);
+}
+
 .hero-photo {
   object-fit: cover;
-  object-position: center 54%;
-  opacity: 0.29;
+  object-position: center;
+  opacity: 0.38;
   filter: saturate(0.52);
 }
 
 .hero-wash {
   background:
-    linear-gradient(90deg, rgba(7, 29, 42, 0.96) 0%, rgba(12, 40, 54, 0.78) 44%, rgba(12, 40, 54, 0.19) 100%),
+    linear-gradient(90deg, rgba(7, 29, 42, 0.88) 0%, rgba(12, 40, 54, 0.54) 44%, rgba(12, 40, 54, 0.12) 100%),
     linear-gradient(0deg, rgba(8, 29, 41, 0.5), transparent 28%);
 }
 
 .water-ripple {
   z-index: 1;
   pointer-events: none;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse at 75% 24%, rgba(87, 181, 166, 0.26), transparent 42%),
+    linear-gradient(135deg, var(--ripple-navy) 4%, var(--ripple-teal) 100%);
+}
+
+.water-ripple::before {
+  position: absolute;
+  inset: -10%;
+  background:
+    radial-gradient(ellipse at 65% 36%, var(--ripple-highlight), transparent 20%),
+    radial-gradient(ellipse at 84% 73%, rgba(87, 181, 166, 0.18), transparent 32%);
+  opacity: 0.14;
+  content: "";
+  pointer-events: none;
 }
 
 .water-ripple canvas {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: 100%;
@@ -1009,12 +1033,12 @@ input {
   }
 
   .hero-photo {
-    object-position: 64% center;
+    object-position: center;
   }
 
   .hero-wash {
     background:
-      linear-gradient(90deg, rgba(7, 29, 42, 0.91), rgba(12, 40, 54, 0.47)),
+      linear-gradient(90deg, rgba(7, 29, 42, 0.82), rgba(12, 40, 54, 0.38)),
       linear-gradient(0deg, rgba(8, 29, 41, 0.56), transparent 45%);
   }
 
