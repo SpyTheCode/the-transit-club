@@ -219,6 +219,113 @@ input {
   height: 100%;
 }
 
+.hero-road-scene {
+  position: absolute;
+  z-index: 1;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 180px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.road-art {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.road-art-mobile {
+  display: none;
+}
+
+.road-vehicle,
+.road-dashes {
+  transform-box: view-box;
+}
+
+.road-vehicle {
+  transform: translateX(var(--road-static-x));
+}
+
+.road-bus-body {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+
+.road-wheel {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.road-sun {
+  opacity: 0.72;
+}
+
+.hero-road-scene[data-running="true"] .road-vehicle {
+  animation: road-travel var(--road-duration) linear var(--road-delay, 0s) infinite;
+}
+
+.hero-road-scene[data-running="true"] .road-bus-body {
+  animation: road-bounce var(--road-bounce-duration) ease-in-out infinite;
+}
+
+.hero-road-scene[data-running="true"] .road-wheel {
+  animation: road-wheel-turn var(--road-wheel-duration) linear infinite;
+}
+
+.hero-road-scene[data-running="true"] .road-dashes {
+  animation: road-dash-travel var(--road-duration) linear infinite;
+}
+
+.hero-road-scene[data-running="true"] .road-sun {
+  animation: road-sun-glow var(--road-glow-duration) ease-in-out infinite alternate;
+}
+
+@keyframes road-travel {
+  from {
+    transform: translateX(var(--road-from));
+  }
+  to {
+    transform: translateX(var(--road-to));
+  }
+}
+
+@keyframes road-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes road-wheel-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes road-dash-travel {
+  to {
+    transform: translateX(var(--road-to));
+  }
+}
+
+@keyframes road-sun-glow {
+  from {
+    opacity: 0.58;
+  }
+  to {
+    opacity: 0.88;
+  }
+}
+
 .hero-content {
   position: relative;
   z-index: 2;
@@ -1032,6 +1139,22 @@ input {
     min-height: 84svh;
   }
 
+  .hero-road-scene {
+    height: 132px;
+  }
+
+  .road-art-desktop {
+    display: none;
+  }
+
+  .road-art-mobile {
+    display: block;
+  }
+
+  .road-bike-background {
+    display: none;
+  }
+
   .hero-photo {
     object-position: center;
   }
@@ -1244,5 +1367,13 @@ input {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .hero-road-scene .road-vehicle,
+  .hero-road-scene .road-dashes,
+  .hero-road-scene .road-bus-body,
+  .hero-road-scene .road-wheel,
+  .hero-road-scene .road-sun {
+    animation: none !important;
   }
 }

@@ -4,25 +4,25 @@ import { useEffect, useRef, type CSSProperties } from "react";
 import { Mesh, Program, Renderer, Texture, Triangle, Vec2, Vec3 } from "ogl";
 
 const RIPPLE_CONFIG = {
-  radius: 0.88, // Maximum wave radius, measured against hero height.
+  radius: 0.59, // Maximum wave radius, measured against hero height.
   startRadius: 0.035,
   expansionSpeed: 0.29,
-  strength: 1.35, // Overall image refraction strength.
+  strength: 0.675, // Overall image refraction strength.
   fadeSpeed: 0.52, // Lower values keep waves visible longer.
   fadeDuration: 3.1,
   waveFrequency: 82,
-  trailIntensity: 0.42, // Base strength of each mouse-trail wave.
-  speedIntensity: 0.68, // Extra trail strength at high pointer speed.
+  trailIntensity: 0.21, // Base strength of each mouse-trail wave.
+  speedIntensity: 0.34, // Extra trail strength at high pointer speed.
   speedReference: 900,
   trailIntervalMs: 125,
   trailMinDistance: 12,
-  clickIntensity: 2,
-  ambientIntensity: 0.34,
+  clickIntensity: 1,
+  ambientIntensity: 0.17,
   ambientIdleDelayMs: 1700,
   ambientIntervalMs: 4300,
-  highlightStrength: 1.45, // Brightness of each ring's leading edge.
+  highlightStrength: 0.725, // Brightness of each ring's leading edge.
   highlightOpacity: 0.32,
-  distortionAmount: 0.06,
+  distortionAmount: 0.03,
   ringWidth: 0.013,
   ringSlots: 12,
   photoTint: 0.74,

@@ -9,6 +9,7 @@ import {
   Menu,
 } from "lucide-react";
 import { Reveal } from "@/components/reveal";
+import { HeroRoadScene } from "@/components/hero-road-scene";
 import { WaterRipple } from "@/components/water-ripple";
 import {
   UpcomingEvents,
@@ -103,6 +104,7 @@ export default function Home() {
           <div className="hero-wash" />
           <WaterRipple />
         </div>
+        <HeroRoadScene />
         <div className="hero-content">
           <p className="eyebrow hero-eyebrow">A community for the in-between</p>
           <h1 id="hero-title">
