@@ -13,15 +13,15 @@ export default async function ProtectedLayout({
   return (
     <div className="private-shell">
       <header className="private-header">
-        <Link aria-label="The Transit Club home" className="brand" href="/">
+        <Link aria-label="MALAK home" className="brand" href="/">
           <Image
             alt=""
             height={64}
             priority
-            src="/logo/logo.png"
+            src="/logo/malak-mark.svg"
             width={100}
           />
-          <span>THE TRANSIT CLUB</span>
+          <span>MALAK</span>
         </Link>
         <div className="private-user">
           <span>{user.email}</span>
@@ -33,7 +33,7 @@ export default async function ProtectedLayout({
       </header>
       <main className="private-main">{children}</main>
       <footer className="private-footer">
-        <Link href="/">← Back to The Transit Club</Link>
+        <Link href="/">← Back to MALAK</Link>
       </footer>
     </div>
   );

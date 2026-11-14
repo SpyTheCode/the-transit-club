@@ -19,42 +19,42 @@ import {
 const gallery = [
   {
     image: "/images/Black tee front.jpg",
-    alt: "The Transit Club black tee",
+    alt: "Black graphic tee from the collection",
     caption: "A familiar route",
   },
   {
     image: "/images/TTC TRUCKER HAT BLUE.jpg",
-    alt: "Blue Transit Club trucker cap",
+    alt: "Blue trucker cap from the collection",
     caption: "Blue skies ahead",
   },
   {
     image: "/images/White tee front .jpg",
-    alt: "The Transit Club white tee",
+    alt: "White graphic tee from the collection",
     caption: "Somewhere, slowly",
   },
   {
     image: "/images/TTC MAP Trucket hat 1.0_20261105194220.jpg",
-    alt: "Transit Club map trucker cap",
+    alt: "Map-edition trucker cap from the collection",
     caption: "A map, not a plan",
   },
   {
     image: "/images/Black Tee back.jpg",
-    alt: "The back of the black Transit Club tee",
+    alt: "Back of the black graphic tee",
     caption: "A little further",
   },
   {
     image: "/images/TTC TRUCKER HAT GREEN.jpg",
-    alt: "Green Transit Club trucker cap",
+    alt: "Green trucker cap from the collection",
     caption: "Take the long way",
   },
   {
     image: "/images/White tee back.jpg",
-    alt: "The back of the white Transit Club tee",
+    alt: "Back of the white graphic tee",
     caption: "Carry it with you",
   },
   {
     image: "/images/TTC TRUCKER HAT RED.jpg",
-    alt: "Red Transit Club trucker cap",
+    alt: "Red trucker cap from the collection",
     caption: "Meet us out there",
   },
 ];
@@ -63,15 +63,15 @@ export default function Home() {
   return (
     <main>
       <header className="site-header">
-        <Link aria-label="The Transit Club home" className="brand" href="/">
+        <Link aria-label="MALAK home" className="brand" href="/">
           <Image
             alt=""
             height={64}
             priority
-            src="/logo/logo.png"
+            src="/logo/malak-mark.svg"
             width={100}
           />
-          <span>THE TRANSIT CLUB</span>
+          <span>MALAK</span>
         </Link>
         <nav aria-label="Main navigation" className="main-nav">
           <a href="#about">About</a>
@@ -94,7 +94,7 @@ export default function Home() {
       <section aria-labelledby="hero-title" className="hero">
         <div className="hero-image">
           <Image
-            alt="Transit Club map-edition hat from the collection"
+            alt="Map-edition trucker cap from the collection"
             className="hero-photo"
             fill
             priority
@@ -250,7 +250,7 @@ export default function Home() {
               Join our WhatsApp <ArrowUpRight aria-hidden="true" size={15} />
             </a>
             <a
-              aria-label="Follow The Transit Club on Instagram"
+              aria-label="Follow MALAK on Instagram"
               className="button button-outline"
               href="https://www.instagram.com/thetransitclub_"
               rel="noreferrer"
@@ -289,9 +289,9 @@ export default function Home() {
       </section>
 
       <footer className="site-footer">
-        <Link aria-label="The Transit Club home" className="footer-brand" href="/">
-          <Image alt="" height={49} src="/logo/logo.png" width={76} />
-          <span>THE TRANSIT CLUB</span>
+        <Link aria-label="MALAK home" className="footer-brand" href="/">
+          <Image alt="" height={49} src="/logo/malak-mark.svg" width={76} />
+          <span>MALAK</span>
         </Link>
         <p>An experiential arm and collective archive by Malak.</p>
         <div className="footer-links">

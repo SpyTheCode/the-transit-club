@@ -57,12 +57,12 @@ export function AuthForm({ mode, notice }: AuthFormProps) {
 
   return (
     <div className="auth-content">
-      <Link aria-label="The Transit Club home" className="auth-brand" href="/">
-        <Image alt="" height={49} src="/logo/logo.png" width={76} />
-        <span>THE TRANSIT CLUB</span>
+      <Link aria-label="MALAK home" className="auth-brand" href="/">
+        <Image alt="" height={49} src="/logo/malak-mark.svg" width={76} />
+        <span>MALAK</span>
       </Link>
       <section className="auth-card">
-        <p className="eyebrow">The Transit Club / Member access</p>
+        <p className="eyebrow">MALAK / Member access</p>
         <h1>{content.title}</h1>
         <p className="auth-subtitle">{content.subtitle}</p>
 

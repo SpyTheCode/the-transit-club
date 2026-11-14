@@ -10,7 +10,7 @@ export default async function AdminPage() {
 
   return (
     <section className="dashboard-panel">
-      <p className="eyebrow">The Transit Club / Administration</p>
+      <p className="eyebrow">MALAK / Administration</p>
       <h1>Welcome to your control room.</h1>
       <p>
         Your admin account is ready. Event and fee management, member

@@ -1,4 +1,4 @@
--- The Transit Club schema for Supabase.
+-- MALAK schema for Supabase.
 -- Run in Supabase Dashboard > SQL Editor as the project owner.
 
 create table if not exists public.profiles (

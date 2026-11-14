@@ -166,7 +166,7 @@ function BusArtwork() {
         x="28"
         y="65"
       >
-        THE TRANSIT CLUB
+        MALAK
       </text>
       <rect
         fill={ROAD_SCENE_CONFIG.colors.roadMarking}

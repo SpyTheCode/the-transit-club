@@ -10,7 +10,7 @@ export default async function DashboardPage() {
 
   return (
     <section className="dashboard-panel">
-      <p className="eyebrow">The Transit Club / Member dashboard</p>
+      <p className="eyebrow">MALAK / Member dashboard</p>
       <h1>Your next journey starts here.</h1>
       <p>
         You are signed in. Your event bookings and tickets will appear here as

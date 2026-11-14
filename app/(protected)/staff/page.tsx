@@ -10,7 +10,7 @@ export default async function StaffPage() {
 
   return (
     <section className="dashboard-panel">
-      <p className="eyebrow">The Transit Club / Staff</p>
+      <p className="eyebrow">MALAK / Staff</p>
       <h1>Your staff space.</h1>
       <p>
         You are signed in as a sub-admin. Staff tools can be added here when
