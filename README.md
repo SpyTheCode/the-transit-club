@@ -27,6 +27,10 @@ For sign-up, email verification, password reset, and protected pages, set:
 - `NEXT_PUBLIC_SITE_URL`: `http://localhost:3000` for local development, or
   your production HTTPS URL after deployment.
 
+Run `npm run check:supabase` to confirm the required environment variables,
+check the project URL format, and make a read-only request to the public
+`events` table. It reports status only and never prints credentials or the URL.
+
 In Supabase, open **Authentication → URL Configuration**. Set the Site URL to
 your current site URL, and add these Redirect URLs:
 
@@ -42,10 +46,13 @@ The callback sends members to `/dashboard`, sub-admins to `/staff`, admins to
 For production, also add the production callback URL to the Supabase redirect
 allowlist and set `NEXT_PUBLIC_SITE_URL` to the exact public site origin.
 
-The public event list reads from the `events` table. Until an upcoming event is
-added, it shows the retreat at Epe with the requested unconfirmed date
-placeholder. The event status controls its call to action: only
-`open_for_payment` events show a sign-up link; view-only events do not.
+The public event list reads from the `events` table. Add event details and dates
+to that table; there is no hardcoded retreat or date. If no events are
+available, the site shows `DATE TO BE ANNOUNCED`. Only `open_for_payment`
+events show a sign-up link; view-only events do not.
+
+Site names and contact links are held in `lib/site-config.ts`. The MALAK
+Instagram URL and order WhatsApp number are intentionally empty until provided.
 
 ## Supabase database
 

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useActionState } from "react";
+import { siteConfig } from "@/lib/site-config";
 import {
   requestPasswordResetAction,
   signInAction,
@@ -57,12 +58,16 @@ export function AuthForm({ mode, notice }: AuthFormProps) {
 
   return (
     <div className="auth-content">
-      <Link aria-label="MALAK home" className="auth-brand" href="/">
+      <Link
+        aria-label={`${siteConfig.brands.malak} home`}
+        className="auth-brand"
+        href="/"
+      >
         <Image alt="" height={49} src="/logo/malak-mark.svg" width={76} />
-        <span>MALAK</span>
+        <span>{siteConfig.brands.malak}</span>
       </Link>
       <section className="auth-card">
-        <p className="eyebrow">MALAK / Member access</p>
+        <p className="eyebrow">{siteConfig.brands.malak} / Member access</p>
         <h1>{content.title}</h1>
         <p className="auth-subtitle">{content.subtitle}</p>
 

@@ -15,6 +15,7 @@ import {
   UpcomingEvents,
   UpcomingEventsFallback,
 } from "@/components/upcoming-events";
+import { siteConfig } from "@/lib/site-config";
 
 const gallery = [
   {
@@ -63,7 +64,11 @@ export default function Home() {
   return (
     <main>
       <header className="site-header">
-        <Link aria-label="MALAK home" className="brand" href="/">
+        <Link
+          aria-label={`${siteConfig.brands.malak} home`}
+          className="brand"
+          href="/"
+        >
           <Image
             alt=""
             height={64}
@@ -71,7 +76,7 @@ export default function Home() {
             src="/logo/malak-mark.svg"
             width={100}
           />
-          <span>MALAK</span>
+          <span>{siteConfig.brands.malak}</span>
         </Link>
         <nav aria-label="Main navigation" className="main-nav">
           <a href="#about">About</a>
@@ -189,7 +194,7 @@ export default function Home() {
           </div>
           <a
             className="text-link"
-            href="https://www.instagram.com/thetransitclub_"
+            href={siteConfig.links.transitClubInstagram}
             rel="noreferrer"
             target="_blank"
           >
@@ -243,16 +248,16 @@ export default function Home() {
           <div className="join-actions">
             <a
               className="button button-primary"
-              href="https://chat.whatsapp.com/Jk7ETjQL9ad1EPmpy9lwJZ?s=cl&p=a&mlu=4&ilr=4&iam=2"
+              href={siteConfig.links.transitClubWhatsApp}
               rel="noreferrer"
               target="_blank"
             >
               Join our WhatsApp <ArrowUpRight aria-hidden="true" size={15} />
             </a>
             <a
-              aria-label="Follow MALAK on Instagram"
+              aria-label={`Follow ${siteConfig.brands.transitClub} on Instagram`}
               className="button button-outline"
-              href="https://www.instagram.com/thetransitclub_"
+              href={siteConfig.links.transitClubInstagram}
               rel="noreferrer"
               target="_blank"
             >
@@ -289,16 +294,20 @@ export default function Home() {
       </section>
 
       <footer className="site-footer">
-        <Link aria-label="MALAK home" className="footer-brand" href="/">
+        <Link
+          aria-label={`${siteConfig.brands.malak} home`}
+          className="footer-brand"
+          href="/"
+        >
           <Image alt="" height={49} src="/logo/malak-mark.svg" width={76} />
-          <span>MALAK</span>
+          <span>{siteConfig.brands.malak}</span>
         </Link>
         <p>An experiential arm and collective archive by Malak.</p>
         <div className="footer-links">
           <Link href="/auth/sign-in">Member sign in</Link>
           <a
             aria-label="Instagram"
-            href="https://www.instagram.com/thetransitclub_"
+            href={siteConfig.links.transitClubInstagram}
             rel="noreferrer"
             target="_blank"
           >

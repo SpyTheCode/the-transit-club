@@ -3,17 +3,19 @@ import { ArrowUpRight } from "lucide-react";
 import { Reveal } from "@/components/reveal";
 import {
   getUpcomingEvents,
-  retreatPlaceholder,
+  upcomingEventsPlaceholder,
   type UpcomingEvent,
 } from "@/lib/events";
-import { formatDateRange } from "@/lib/format-date";
+import { formatDate, formatDateRange } from "@/lib/format-date";
+import { EVENT_DATE_PLACEHOLDER } from "@/lib/site-config";
 
 function eventDateLabel(event: UpcomingEvent) {
-  if (event.date_label) return event.date_label;
   if (event.start_date && event.end_date) {
     return formatDateRange(new Date(event.start_date), new Date(event.end_date));
   }
-  return "Dates to be announced";
+  if (event.start_date) return formatDate(new Date(event.start_date));
+  if (event.end_date) return formatDate(new Date(event.end_date));
+  return EVENT_DATE_PLACEHOLDER;
 }
 
 function EventCards({ events }: { events: UpcomingEvent[] }) {
@@ -28,7 +30,9 @@ function EventCards({ events }: { events: UpcomingEvent[] }) {
             <div className="event-main">
               <p className="event-date">{eventDateLabel(event)}</p>
               <h3>{event.title}</h3>
-              <p className="event-destination">{event.destination}</p>
+              {event.destination && (
+                <p className="event-destination">{event.destination}</p>
+              )}
             </div>
             <p className="event-description">
               {event.description ||
@@ -61,5 +65,5 @@ export async function UpcomingEvents() {
 }
 
 export function UpcomingEventsFallback() {
-  return <EventCards events={[retreatPlaceholder]} />;
+  return <EventCards events={[upcomingEventsPlaceholder]} />;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type CSSProperties } from "react";
+import { siteConfig } from "@/lib/site-config";
 
 const ROAD_SCENE_CONFIG = {
   // Flat illustration palette for the bus, background and road.
@@ -166,7 +167,7 @@ function BusArtwork() {
         x="28"
         y="65"
       >
-        MALAK
+        {siteConfig.brands.malak}
       </text>
       <rect
         fill={ROAD_SCENE_CONFIG.colors.roadMarking}

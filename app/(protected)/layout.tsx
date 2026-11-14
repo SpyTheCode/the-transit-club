@@ -3,6 +3,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { signOutAction } from "@/app/auth/actions";
 import { requireProfile } from "@/lib/supabase/server";
+import { siteConfig } from "@/lib/site-config";
 
 export default async function ProtectedLayout({
   children,
@@ -13,7 +14,11 @@ export default async function ProtectedLayout({
   return (
     <div className="private-shell">
       <header className="private-header">
-        <Link aria-label="MALAK home" className="brand" href="/">
+        <Link
+          aria-label={`${siteConfig.brands.malak} home`}
+          className="brand"
+          href="/"
+        >
           <Image
             alt=""
             height={64}
@@ -21,7 +26,7 @@ export default async function ProtectedLayout({
             src="/logo/malak-mark.svg"
             width={100}
           />
-          <span>MALAK</span>
+          <span>{siteConfig.brands.malak}</span>
         </Link>
         <div className="private-user">
           <span>{user.email}</span>
@@ -33,7 +38,7 @@ export default async function ProtectedLayout({
       </header>
       <main className="private-main">{children}</main>
       <footer className="private-footer">
-        <Link href="/">← Back to MALAK</Link>
+        <Link href="/">← Back to {siteConfig.brands.malak}</Link>
       </footer>
     </div>
   );

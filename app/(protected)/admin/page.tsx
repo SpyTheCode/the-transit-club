@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { requireRole } from "@/lib/supabase/server";
+import { siteConfig } from "@/lib/site-config";
 
 export const instant = false;
 
@@ -10,7 +11,7 @@ export default async function AdminPage() {
 
   return (
     <section className="dashboard-panel">
-      <p className="eyebrow">MALAK / Administration</p>
+      <p className="eyebrow">{siteConfig.brands.malak} / Administration</p>
       <h1>Welcome to your control room.</h1>
       <p>
         Your admin account is ready. Event and fee management, member
