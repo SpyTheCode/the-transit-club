@@ -1,8 +1,39 @@
 import type { NextConfig } from "next";
 
+function getSupabaseImageHostname() {
+  const value = process.env.SUPABASE_URL?.trim().replace(/^["']|["']$/g, "");
+  if (!value) return undefined;
+
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" ? url.hostname : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+const supabaseImageHostname = getSupabaseImageHostname();
+
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
+  images: {
+    qualities: [50, 55, 65, 68, 70, 72, 75],
+    remotePatterns: supabaseImageHostname
+      ? [
+          {
+            protocol: "https",
+            hostname: supabaseImageHostname,
+            pathname: "/storage/v1/object/public/product-images/**",
+          },
+        ]
+      : [],
+  },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "27mb",
+    },
+  },
   async headers() {
     return [
       {

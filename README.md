@@ -19,7 +19,7 @@ The date labels use `lib/format-date.ts`. The logo and gallery images are in
 - `/` is the Nexus gateway between MALAK and THE TRANSIT CLUB.
 - `/malak` and `/malak/services` introduce the brand and its services.
 - `/malak/products`, `/malak/products/[slug]`, and
-  `/malak/category/[slug]` show coming-soon states until the catalog phase.
+  `/malak/category/[slug]` show the product catalog.
 - `/transit-club` contains the events, gallery, ripple, and road scene.
 - `/transit-club/archive` and `/transit-club/waitlist` show coming-soon states
   until the archive and waitlist phase.
@@ -67,6 +67,36 @@ events show a sign-up link; view-only events do not.
 
 Site names and contact links are held in `lib/site-config.ts`. The MALAK
 Instagram URL and order WhatsApp number are intentionally empty until provided.
+
+## Product catalog setup
+
+The catalog requires the existing base schema first because it reuses the
+`public.is_admin()` permission function.
+
+1. In the Supabase Dashboard, open **SQL Editor → New query**.
+2. If the base website schema has not been installed, run the full
+   [`supabase/schema.sql`](./supabase/schema.sql) first. Do not run this step
+   again if the existing tables and `public.is_admin()` function are already
+   in place.
+3. Open another **New query**, paste the full contents of
+   [`supabase/schema-shop.sql`](./supabase/schema-shop.sql), and click **Run**.
+   The script creates the product tables, category seeds, starter products,
+   access policies, and the public `product-images` storage bucket.
+4. In **Table Editor**, confirm that `categories` contains five rows,
+   `products` contains eight starter rows, and `product_images` contains eight
+   static-image records. The eight public images are files already under
+   `public/images`; the two MALAK landing-page photos under
+   `public/images/malak` are not products.
+5. In **Storage → product-images**, confirm the bucket is public, allows JPG,
+   PNG, and WebP files, and has a 5 MB file-size limit. The SQL policies allow
+   public reads and restrict file changes to admins.
+6. Visit `/malak/products` to confirm the published starter catalog appears.
+   Uploaded product photos appear in the public catalog after the product is
+   published.
+
+Product prices are entered in naira in the admin screen and saved as integer
+kobo. Product ordering is not enabled yet; the order button stays hidden until
+the MALAK WhatsApp number is added in `lib/site-config.ts`.
 
 ## Supabase database
 

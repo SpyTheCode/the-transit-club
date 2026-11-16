@@ -1,23 +1,13 @@
 import { Suspense } from "react";
-import { PortalComingSoon } from "@/components/portal-coming-soon";
+import { CatalogFallback, CatalogPage } from "@/components/shop-public";
 
-async function CategoryComingSoon({
+async function CategoryCatalog({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-
-  return (
-    <PortalComingSoon
-      theme="malak"
-      section="MALAK / CATEGORY"
-      headline={slug.replace(/-/g, " ")}
-      description="This category is being prepared. Check back soon."
-      backHref="/malak/products"
-      backLabel="BACK TO THE CATALOGUE"
-    />
-  );
+  return <CatalogPage categorySlug={slug} />;
 }
 
 export default function MalakCategoryPage({
@@ -27,18 +17,9 @@ export default function MalakCategoryPage({
 }) {
   return (
     <Suspense
-      fallback={
-        <PortalComingSoon
-          theme="malak"
-          section="MALAK / CATEGORY"
-          headline="Category details."
-          description="This category is being prepared. Check back soon."
-          backHref="/malak/products"
-          backLabel="BACK TO THE CATALOGUE"
-        />
-      }
+      fallback={<CatalogFallback />}
     >
-      <CategoryComingSoon params={params} />
+      <CategoryCatalog params={params} />
     </Suspense>
   );
 }

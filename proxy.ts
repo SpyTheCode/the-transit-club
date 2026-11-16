@@ -33,6 +33,10 @@ export async function proxy(request: NextRequest) {
 
   const { data, error } = await supabase.auth.getUser();
 
+  if (error?.name === "AuthSessionMissingError") {
+    return NextResponse.redirect(new URL("/auth/sign-in", request.url));
+  }
+
   if (error) {
     console.error("Supabase could not verify a protected request:", error.message);
     return new NextResponse(

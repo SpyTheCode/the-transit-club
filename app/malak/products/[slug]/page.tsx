@@ -1,24 +1,8 @@
 import { Suspense } from "react";
-import { PortalComingSoon } from "@/components/portal-coming-soon";
-
-async function ProductComingSoon({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-
-  return (
-    <PortalComingSoon
-      theme="malak"
-      section="MALAK / PRODUCT"
-      headline={slug.replace(/-/g, " ")}
-      description="Product details are coming soon."
-      backHref="/malak/products"
-      backLabel="BACK TO THE CATALOGUE"
-    />
-  );
-}
+import {
+  ProductDetailContent,
+  ProductDetailFallback,
+} from "@/components/shop-public";
 
 export default function MalakProductPage({
   params,
@@ -26,19 +10,8 @@ export default function MalakProductPage({
   params: Promise<{ slug: string }>;
 }) {
   return (
-    <Suspense
-      fallback={
-        <PortalComingSoon
-          theme="malak"
-          section="MALAK / PRODUCT"
-          headline="Product details."
-          description="Product details are coming soon."
-          backHref="/malak/products"
-          backLabel="BACK TO THE CATALOGUE"
-        />
-      }
-    >
-      <ProductComingSoon params={params} />
+    <Suspense fallback={<ProductDetailFallback />}>
+      <ProductDetailContent params={params} />
     </Suspense>
   );
 }
