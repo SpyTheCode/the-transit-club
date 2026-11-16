@@ -21,8 +21,8 @@ The date labels use `lib/format-date.ts`. The logo and gallery images are in
 - `/malak/products`, `/malak/products/[slug]`, and
   `/malak/category/[slug]` show the product catalog.
 - `/transit-club` contains the events, gallery, ripple, and road scene.
-- `/transit-club/archive` and `/transit-club/waitlist` show coming-soon states
-  until the archive and waitlist phase.
+- `/transit-club/archive` displays published archive items, and
+  `/transit-club/waitlist` accepts waitlist entries.
 
 The MALAK logo is `public/logo/malak-logo.jpg`; the community logo is
 `public/logo/transit-club-logo.png`. The original files remain in the logo
@@ -97,6 +97,27 @@ The catalog requires the existing base schema first because it reuses the
 Product prices are entered in naira in the admin screen and saved as integer
 kobo. Product ordering is not enabled yet; the order button stays hidden until
 the MALAK WhatsApp number is added in `lib/site-config.ts`.
+
+## Archive and waitlist setup
+
+The archive and waitlist schema requires the base schema (`events`,
+`public.is_admin()`, and `public.set_updated_at()`).
+
+1. In Supabase Dashboard → **SQL Editor**, open a new query.
+2. Paste the full contents of [`supabase/schema-archive.sql`](./supabase/schema-archive.sql)
+   and click **Run**. No archive items are seeded.
+3. In **Table Editor**, confirm `archive_items` and `waitlist_entries` exist.
+   The archive table should be empty. Confirm waitlist row-level security is on;
+   the public can insert, but only admins can read rows.
+4. In **Storage → archive-images**, confirm the bucket is public-read, allows
+   JPG, PNG, and WebP files, and has a 5 MB file-size limit. The SQL policies
+   restrict uploads and deletes to admins.
+5. Test `/transit-club/archive`, `/transit-club/waitlist`, and (as an admin)
+   `/admin/archive` and `/admin/waitlist`.
+
+The waitlist stores first name, last name, email, optional event id, and the
+database-generated creation time. Rate limiting is best effort because it uses
+short-lived server memory and is not shared across server instances.
 
 ## Supabase database
 

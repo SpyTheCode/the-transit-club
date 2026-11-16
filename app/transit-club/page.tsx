@@ -11,6 +11,7 @@ import { Reveal } from "@/components/reveal";
 import { HeroRoadScene } from "@/components/hero-road-scene";
 import { PortalShell } from "@/components/portal-shell";
 import { WaterRipple } from "@/components/water-ripple";
+import { ArchivePreview } from "@/components/archive-public";
 import {
   UpcomingEvents,
   UpcomingEventsFallback,
@@ -201,6 +202,16 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <Suspense
+        fallback={
+          <section className="archive-preview" aria-label="Archive preview">
+            <p className="archive-preview-note">Loading the archive.</p>
+          </section>
+        }
+      >
+        <ArchivePreview />
+      </Suspense>
 
       <section aria-labelledby="join-title" className="join-section" id="join">
         <Reveal className="join-inner">
