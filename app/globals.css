@@ -1910,6 +1910,61 @@ input {
   object-fit: contain;
 }
 
+.malak-product-feature {
+  display: grid;
+  min-height: 340px;
+  place-items: center;
+  padding: clamp(0.5rem, 2vw, 1.5rem);
+  background: #f4f1eb;
+}
+
+.malak-product-feature-image {
+  display: block;
+  width: 100%;
+  max-height: 560px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.malak-secondary-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.75fr);
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  margin-top: 1.5rem;
+  padding: clamp(1rem, 3vw, 2.5rem);
+  border: 1px solid var(--portal-line);
+  background: #17191a;
+  color: #f4efe9;
+}
+
+.malak-secondary-image {
+  min-width: 0;
+  margin: 0;
+  background: #080808;
+}
+
+.malak-secondary-image-photo {
+  display: block;
+  width: 100%;
+  max-height: 600px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.malak-secondary-image figcaption {
+  padding: 0.75rem;
+}
+
+.malak-secondary-copy h2 {
+  margin: 0;
+  font-family: var(--portal-heading);
+  font-size: clamp(2.2rem, 5vw, 4.5rem);
+  letter-spacing: -0.05em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
 .malak-portal-note {
   background: #dcefed;
 }
@@ -1940,7 +1995,8 @@ input {
 
 @media (max-width: 800px) {
   .gateway-pathways,
-  .malak-landing-hero {
+  .malak-landing-hero,
+  .malak-secondary-section {
     grid-template-columns: 1fr;
   }
 
@@ -2020,6 +2076,23 @@ input {
 
   .malak-landing-hero {
     padding: 1.4rem;
+  }
+
+  .malak-product-feature {
+    min-height: 0;
+    padding: 0.45rem;
+  }
+
+  .malak-product-feature-image {
+    max-height: 430px;
+  }
+
+  .malak-secondary-section {
+    padding: 0.85rem;
+  }
+
+  .malak-secondary-image-photo {
+    max-height: 430px;
   }
 
   .malak-landing-copy h1 {

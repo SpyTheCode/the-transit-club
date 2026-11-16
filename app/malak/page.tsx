@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { PortalShell } from "@/components/portal-shell";
-import { siteConfig } from "@/lib/site-config";
 
 export default function MalakLandingPage() {
   return (
@@ -29,15 +28,16 @@ export default function MalakLandingPage() {
             </Link>
           </div>
         </div>
-        <div className="malak-logo-feature">
+        <div className="malak-logo-feature malak-product-feature">
           <Image
-            alt={`${siteConfig.brands.malak} logo`}
-            className="malak-logo-feature-image"
-            height={1194}
+            alt="Technical colorway reference for a MALAK bag"
+            className="malak-product-feature-image"
+            height={2700}
             priority
-            sizes="(max-width: 700px) 90vw, 42vw"
-            src="/logo/malak-logo.jpg"
-            width={1342}
+            quality={72}
+            sizes="(max-width: 800px) 90vw, 48vw"
+            src="/images/malak/malak-product-1.jpg"
+            width={2160}
           />
         </div>
       </section>
@@ -67,6 +67,27 @@ export default function MalakLandingPage() {
             ENTER THE TRANSIT CLUB
           </Link>
         </article>
+      </section>
+      <section className="malak-secondary-section">
+        <figure className="malak-secondary-image">
+          <Image
+            alt="MALAK wordmark over a close-up of a red technical bag on black"
+            className="malak-secondary-image-photo"
+            height={2700}
+            loading="lazy"
+            quality={68}
+            sizes="(max-width: 800px) 90vw, 48vw"
+            src="/images/malak/malak-product-2.jpg"
+            width={2160}
+          />
+          <figcaption className="portal-eyebrow">
+            MALAK / MATERIAL STUDY
+          </figcaption>
+        </figure>
+        <div className="malak-secondary-copy">
+          <p className="portal-eyebrow">FORM / DETAIL / FINISH</p>
+          <h2>Objects with a point of view.</h2>
+        </div>
       </section>
     </PortalShell>
   );
