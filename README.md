@@ -14,6 +14,20 @@ A Next.js App Router site built with TypeScript and Tailwind CSS.
 The date labels use `lib/format-date.ts`. The logo and gallery images are in
 `public/logo` and `public/images`.
 
+## Site structure
+
+- `/` is the Nexus gateway between MALAK and THE TRANSIT CLUB.
+- `/malak` and `/malak/services` introduce the brand and its services.
+- `/malak/products`, `/malak/products/[slug]`, and
+  `/malak/category/[slug]` show coming-soon states until the catalog phase.
+- `/transit-club` contains the events, gallery, ripple, and road scene.
+- `/transit-club/archive` and `/transit-club/waitlist` show coming-soon states
+  until the archive and waitlist phase.
+
+The MALAK logo is `public/logo/malak-logo.jpg`; the community logo is
+`public/logo/transit-club-logo.png`. The original files remain in the logo
+folder.
+
 ## Environment variables
 
 Copy `.env.example` to `.env.local` and add your service credentials there.

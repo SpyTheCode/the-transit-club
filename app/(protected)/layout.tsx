@@ -21,10 +21,11 @@ export default async function ProtectedLayout({
         >
           <Image
             alt=""
-            height={64}
+            className="private-brand-logo"
+            height={1194}
             priority
-            src="/logo/malak-mark.svg"
-            width={100}
+            src="/logo/malak-logo.jpg"
+            width={1342}
           />
           <span>{siteConfig.brands.malak}</span>
         </Link>

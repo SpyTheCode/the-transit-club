@@ -63,7 +63,13 @@ export function AuthForm({ mode, notice }: AuthFormProps) {
         className="auth-brand"
         href="/"
       >
-        <Image alt="" height={49} src="/logo/malak-mark.svg" width={76} />
+        <Image
+          alt=""
+          className="auth-brand-logo"
+          height={1194}
+          src="/logo/malak-logo.jpg"
+          width={1342}
+        />
         <span>{siteConfig.brands.malak}</span>
       </Link>
       <section className="auth-card">
