@@ -37,7 +37,7 @@ function ProductCard({ product }: { product: ShopProduct }) {
             src={image.src}
           />
         ) : (
-          <span className="product-image-empty">IMAGE COMING SOON</span>
+          <span className="product-image-empty">NO IMAGE YET</span>
         )}
       </Link>
       <div className="product-card-copy">
@@ -222,7 +222,7 @@ export async function ProductDetailContent({
             ))
           ) : (
             <div className="product-detail-image product-image-empty">
-              IMAGE COMING SOON
+              <span className="product-image-empty">NO IMAGE YET</span>
             </div>
           )}
         </div>

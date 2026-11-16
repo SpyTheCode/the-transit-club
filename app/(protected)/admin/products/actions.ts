@@ -1,8 +1,16 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireRole, createSupabaseServerClient } from "@/lib/supabase/server";
+import {
+  hasAffectedRows,
+  refreshShopPages,
+} from "@/lib/admin/mutations";
+import {
+  getAdminImageExtension,
+  isValidAdminImage,
+  MAX_ADMIN_IMAGE_BYTES,
+} from "@/lib/admin/image-validation";
 
 export type ShopActionState = {
   success?: string;
@@ -40,23 +48,12 @@ const imageUpdateSchema = z.object({
   sortOrder: z.number().int().min(0).max(100000),
 });
 
-const MAX_FILE_BYTES = 5 * 1024 * 1024;
 const MAX_IMAGES_PER_UPLOAD = 5;
 const PRODUCT_IMAGE_BUCKET = "product-images";
-const allowedMimeTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 async function getAdminClient() {
   await requireRole(["admin"]);
   return createSupabaseServerClient({ writable: true });
-}
-
-function refreshShopPages() {
-  revalidatePath("/admin");
-  revalidatePath("/admin/products");
-  revalidatePath("/malak");
-  revalidatePath("/malak/products");
-  revalidatePath("/malak/products/[slug]", "page");
-  revalidatePath("/malak/category/[slug]", "page");
 }
 
 function getProductFields(formData: FormData) {
@@ -124,7 +121,7 @@ export async function saveProductAction(
         .maybeSingle()
     : await supabase.from("products").insert(values).select("id").maybeSingle();
 
-  if (result.error || !result.data) {
+  if (!hasAffectedRows(result)) {
     console.error("Shop product save failed: database write was rejected.");
     return {
       error:
@@ -158,30 +155,29 @@ export async function deleteProductAction(
   const storagePaths = imageRows
     .filter((image) => image.kind === "storage")
     .map((image) => image.path);
-  if (storagePaths.length) {
-    const { error: storageError } = await supabase.storage
-      .from(PRODUCT_IMAGE_BUCKET)
-      .remove(storagePaths);
-    if (storageError) {
-      console.error("Shop product delete failed: storage removal was rejected.");
-      return {
-        error: "Uploaded images could not be removed. The product was not deleted.",
-      };
-    }
-  }
-
-  const { error } = await supabase
+  const result = await supabase
     .from("products")
     .delete()
-    .eq("id", parsedId.data);
-  if (error) {
+    .eq("id", parsedId.data)
+    .select("id")
+    .maybeSingle();
+  if (!hasAffectedRows(result)) {
     console.error("Shop product delete failed: database deletion was rejected.");
-    return {
-      error:
-        storagePaths.length > 0
-          ? "The product could not be deleted after its uploaded files were removed. Refresh and retry."
-          : "The product could not be deleted. Please try again.",
-    };
+    return { error: "The product was not deleted. Check its access and try again." };
+  }
+
+  if (storagePaths.length) {
+    const storageResult = await supabase.storage
+      .from(PRODUCT_IMAGE_BUCKET)
+      .remove(storagePaths);
+    if (!hasAffectedRows(storageResult, storagePaths.length)) {
+      console.error("Shop product delete succeeded, but storage cleanup was incomplete.");
+      refreshShopPages();
+      return {
+        error:
+          "The product was removed from the catalog, but one or more uploaded files could not be removed.",
+      };
+    }
   }
 
   refreshShopPages();
@@ -189,29 +185,6 @@ export async function deleteProductAction(
     success:
       "Product and its database image records were deleted. Static files in /public were not removed.",
   };
-}
-
-function hasExpectedImageSignature(bytes: Uint8Array, mimeType: string) {
-  if (mimeType === "image/jpeg") {
-    return bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
-  }
-  if (mimeType === "image/png") {
-    return (
-      bytes[0] === 0x89 &&
-      bytes[1] === 0x50 &&
-      bytes[2] === 0x4e &&
-      bytes[3] === 0x47 &&
-      bytes[4] === 0x0d &&
-      bytes[5] === 0x0a &&
-      bytes[6] === 0x1a &&
-      bytes[7] === 0x0a
-    );
-  }
-  return (
-    mimeType === "image/webp" &&
-    String.fromCharCode(...bytes.slice(0, 4)) === "RIFF" &&
-    String.fromCharCode(...bytes.slice(8, 12)) === "WEBP"
-  );
 }
 
 export async function uploadProductImagesAction(
@@ -231,20 +204,15 @@ export async function uploadProductImagesAction(
   if (files.length > MAX_IMAGES_PER_UPLOAD) {
     return { error: "Upload no more than five images at a time." };
   }
-  if (files.some((file) => file.size > MAX_FILE_BYTES)) {
+  if (files.some((file) => file.size > MAX_ADMIN_IMAGE_BYTES)) {
     return { error: "Each image must be 5 MB or smaller." };
   }
-  if (files.some((file) => !allowedMimeTypes.has(file.type))) {
+  if (files.some((file) => !getAdminImageExtension(file.type))) {
     return { error: "Use JPG, PNG, or WebP images only." };
   }
 
-  const bytes = await Promise.all(files.map((file) => file.arrayBuffer()));
-  if (
-    files.some(
-      (file, index) =>
-        !hasExpectedImageSignature(new Uint8Array(bytes[index]), file.type),
-    )
-  ) {
+  const validImages = await Promise.all(files.map(isValidAdminImage));
+  if (validImages.some((valid) => !valid)) {
     return { error: "One or more files are not valid JPG, PNG, or WebP images." };
   }
 
@@ -269,16 +237,13 @@ export async function uploadProductImagesAction(
     return { error: "Current product images could not be checked." };
   }
 
-  const extensions: Record<string, string> = {
-    "image/jpeg": "jpg",
-    "image/png": "png",
-    "image/webp": "webp",
-  };
   const uploadedPaths: string[] = [];
   const imageRecords = [];
 
   for (const [index, file] of files.entries()) {
-    const path = `${product.id}/${crypto.randomUUID()}.${extensions[file.type]}`;
+    const extension = getAdminImageExtension(file.type);
+    if (!extension) return { error: "Use JPG, PNG, or WebP images only." };
+    const path = `${product.id}/${crypto.randomUUID()}.${extension}`;
     const { error: uploadError } = await supabase.storage
       .from(PRODUCT_IMAGE_BUCKET)
       .upload(path, file, { contentType: file.type, upsert: false });
@@ -304,10 +269,11 @@ export async function uploadProductImagesAction(
     });
   }
 
-  const { error: insertError } = await supabase
+  const insertResult = await supabase
     .from("product_images")
-    .insert(imageRecords);
-  if (insertError) {
+    .insert(imageRecords)
+    .select("id");
+  if (!hasAffectedRows(insertResult, imageRecords.length)) {
     const { error: cleanupError } = await supabase.storage
       .from(PRODUCT_IMAGE_BUCKET)
       .remove(uploadedPaths);
@@ -336,16 +302,18 @@ export async function updateProductImageAction(
     return { error: "Enter alt text (up to 250 characters) and a valid image order." };
   }
 
-  const { error } = await supabase
+  const result = await supabase
     .from("product_images")
     .update({
       alt_text: parsed.data.altText,
       sort_order: parsed.data.sortOrder,
     })
-    .eq("id", parsed.data.imageId);
-  if (error) {
+    .eq("id", parsed.data.imageId)
+    .select("id")
+    .maybeSingle();
+  if (!hasAffectedRows(result)) {
     console.error("Shop image update failed: database write was rejected.");
-    return { error: "The image details could not be saved." };
+    return { error: "The image details were not saved. Check access and try again." };
   }
 
   refreshShopPages();
@@ -369,28 +337,29 @@ export async function deleteProductImageAction(
     .maybeSingle();
   if (imageReadError || !image) return { error: "The image could not be found." };
 
-  if (image.kind === "storage") {
-    const { error } = await supabase.storage
-      .from(PRODUCT_IMAGE_BUCKET)
-      .remove([image.path]);
-    if (error) {
-      console.error("Shop image deletion failed: storage removal was rejected.");
-      return { error: "The uploaded file could not be removed. Nothing was deleted." };
-    }
-  }
-
-  const { error } = await supabase
+  const deleteResult = await supabase
     .from("product_images")
     .delete()
-    .eq("id", imageId.data);
-  if (error) {
+    .eq("id", imageId.data)
+    .select("id")
+    .maybeSingle();
+  if (!hasAffectedRows(deleteResult)) {
     console.error("Shop image deletion failed: database row could not be removed.");
-    return {
-      error:
-        image.kind === "storage"
-          ? "The database record remains, but its uploaded file was removed. Refresh before retrying."
-          : "The image record could not be removed.",
-    };
+    return { error: "The image was not deleted. Its file was left untouched." };
+  }
+
+  if (image.kind === "storage") {
+    const storageResult = await supabase.storage
+      .from(PRODUCT_IMAGE_BUCKET)
+      .remove([image.path]);
+    if (!hasAffectedRows(storageResult)) {
+      console.error("Shop image record was deleted, but its storage file cleanup failed.");
+      refreshShopPages();
+      return {
+        error:
+          "The image was removed from the product, but its uploaded file could not be removed.",
+      };
+    }
   }
 
   refreshShopPages();

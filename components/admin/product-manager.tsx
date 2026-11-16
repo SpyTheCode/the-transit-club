@@ -319,8 +319,8 @@ function ProductEditor({
         <section className="admin-product-images">
           <h3>PRODUCT IMAGES</h3>
           <p>
-            Static starter images can be hidden or removed from the product
-            record. Removing one never deletes its original /public file.
+            Deleting a starter image removes it from the site and its database
+            record, but the original file stays in the project under /public.
           </p>
           <ImageUploadForm product={product} />
           {product.images.map((image) => (
